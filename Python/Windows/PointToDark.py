@@ -1,8 +1,7 @@
 #coding=utf-8
 
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout
-from PyQt5.QtCore import Qt, QPoint
-from PyQt5.QtGui import QFont, QCursor
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
+from PyQt5.QtCore import Qt, QEvent
 
 class AREACFG:
     # x position
@@ -13,8 +12,6 @@ class AREACFG:
     width = 1
     # height
     height = 1
-
-
 
 class QUnFrameWindow(QWidget):
     """
@@ -33,6 +30,13 @@ class QUnFrameWindow(QWidget):
 
         self.move(AREACFG.x, AREACFG.y)
         self.resize(AREACFG.width, AREACFG.height)
+
+    def showEvent(self, event):
+        # Windows下面有一定概率无法置顶，增加此重载函数确保置顶正常
+        if event.type() == QEvent.Show:
+            self.activateWindow()
+            self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
+            #self.setTopMost()
 
     def initLayout(self):
         # 设置框架布局
